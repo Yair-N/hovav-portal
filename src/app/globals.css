@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Palette read directly from the Canva design's computed CSS. */
+  --hovav-header-blue: #c4e0ed;
+  --hovav-cream: #f5e8c2;
+  --hovav-sports-gray: #ebe4e4;
+  --hovav-footer-beige: #f5f5ef;
+  --hovav-bar-black: #000000;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-hovav-header-blue: var(--hovav-header-blue);
+  --color-hovav-cream: var(--hovav-cream);
+  --color-hovav-sports-gray: var(--hovav-sports-gray);
+  --color-hovav-footer-beige: var(--hovav-footer-beige);
+  --font-sans: var(--font-hebrew);
+  --font-heading: var(--font-heading);
+  --font-handwriting: var(--font-handwriting);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  color-scheme: light;
+}
