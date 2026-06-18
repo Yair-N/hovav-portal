@@ -6,7 +6,6 @@ import type {
   OpinionPost,
   RecommendationItem,
   TextHighlight,
-  SectionPreview,
 } from '@/types/content'
 
 // ---------------------------------------------------------------------------
@@ -30,10 +29,6 @@ const NEWS_QUERY = `*[_type == "newsItem"] | order(publishedAt desc) {
   _id, title, excerpt, image, publishedAt, author, isFeatured
 }`
 
-const FEATURED_NEWS_QUERY = `*[_type == "newsItem" && isFeatured == true][0] {
-  _id, title, excerpt, image, publishedAt, author
-}`
-
 export async function getNewsItems(): Promise<NewsItem[]> {
   const items = await client.fetch(NEWS_QUERY)
   return items.map((item: Record<string, unknown>) => ({
@@ -44,19 +39,6 @@ export async function getNewsItems(): Promise<NewsItem[]> {
     publishedAt: item.publishedAt as string | undefined,
     author: item.author as string | undefined,
   }))
-}
-
-export async function getFeaturedNewsItem(): Promise<NewsItem | null> {
-  const item = await client.fetch(FEATURED_NEWS_QUERY)
-  if (!item) return null
-  return {
-    id: item._id,
-    title: item.title,
-    excerpt: item.excerpt,
-    image: resolveImage(item.image, 400),
-    publishedAt: item.publishedAt,
-    author: item.author,
-  }
 }
 
 // ---------------------------------------------------------------------------
@@ -234,39 +216,3 @@ export async function getBehindTheScenes(): Promise<TextHighlight[]> {
   }))
 }
 
-// ---------------------------------------------------------------------------
-// Site Settings (section previews for homepage)
-// ---------------------------------------------------------------------------
-
-const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0] {
-  flexibleHourSections[] {
-    title, href, description, image
-  },
-  cultureSections[] {
-    title, href, description, image
-  }
-}`
-
-interface SiteSettings {
-  flexibleHourSections: SectionPreview[]
-  cultureSections: SectionPreview[]
-}
-
-export async function getSiteSettings(): Promise<SiteSettings> {
-  const data = await client.fetch(SITE_SETTINGS_QUERY)
-  if (!data) return { flexibleHourSections: [], cultureSections: [] }
-
-  const mapPreviews = (items: Record<string, unknown>[] | null): SectionPreview[] =>
-    (items ?? []).map((item, i) => ({
-      id: `sp-${i}`,
-      href: item.href as string,
-      title: item.title as string,
-      description: item.description as string,
-      image: resolveImage(item.image, 300),
-    }))
-
-  return {
-    flexibleHourSections: mapPreviews(data.flexibleHourSections),
-    cultureSections: mapPreviews(data.cultureSections),
-  }
-}

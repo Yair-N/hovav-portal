@@ -1,9 +1,4 @@
-// Shared content models for the site.
-//
-// These mirror the "cards" identified in the Canva design. Each one is a
-// placeholder shape for content that will eventually come from the CMS
-// (Sanity) once that's wired up. For now, pages are filled with static
-// placeholder data living in src/lib/placeholder-data.ts.
+// Shared content models for the site. Each type maps to a Sanity document schema.
 
 /** A single news story shown on the News page grid and as a Home page teaser. */
 export interface NewsItem {
@@ -29,16 +24,6 @@ export interface GameItem {
   image?: string;
   /** External or internal link to actually play the game. */
   link?: string;
-}
-
-/** A short teaser card on the Home page that links out to one of the other sections. */
-export interface SectionPreview {
-  id: string;
-  /** Matches the target section's route, e.g. "/jokes". */
-  href: string;
-  title: string;
-  description: string;
-  image?: string;
 }
 
 /** A single comic strip entry for the weekly comics corner. */
@@ -76,10 +61,4 @@ export interface TextHighlight {
   id: string;
   title: string;
   body: string;
-}
-
-/** Common props every section header banner needs. */
-export interface PageHeaderContent {
-  title: string;
-  image?: string;
 }

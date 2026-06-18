@@ -3,16 +3,17 @@ import PlaceholderImage from "./PlaceholderImage";
 
 interface PageHeaderProps {
   title: string;
+  description?: string;
   image?: string;
 }
 
-export default function PageHeader({ title, image }: PageHeaderProps) {
+export default function PageHeader({ title, description, image }: PageHeaderProps) {
   return (
     <div>
-      <div className="bg-hovav-header-blue flex items-center gap-6 px-6 py-8 md:px-12 md:py-12">
-        {image ? (
-          <div className="shrink-0 bg-white p-2 pb-8 shadow-md rotate-[-2deg] sm:p-3 sm:pb-10 md:p-4 md:pb-12">
-            <div className="relative h-36 w-36 sm:h-44 sm:w-44 md:h-56 md:w-56 lg:h-64 lg:w-64">
+      <div className="section-header">
+        <div className="polaroid">
+          {image ? (
+            <div className="relative h-20 w-20 sm:h-24 sm:w-24 md:h-32 md:w-32 lg:h-40 lg:w-40">
               <Image
                 src={image}
                 alt=""
@@ -20,15 +21,16 @@ export default function PageHeader({ title, image }: PageHeaderProps) {
                 className="object-contain object-center"
               />
             </div>
-          </div>
-        ) : (
-          <div className="shrink-0 bg-white p-2 pb-8 shadow-md rotate-[-2deg] sm:p-3 sm:pb-10 md:p-4 md:pb-12">
-            <PlaceholderImage className="h-36 w-36 sm:h-44 sm:w-44 md:h-56 md:w-56 lg:h-64 lg:w-64" />
-          </div>
-        )}
-        <h1 className="font-heading text-3xl md:text-5xl">{title}</h1>
+          ) : (
+            <PlaceholderImage className="h-20 w-20 sm:h-24 sm:w-24 md:h-32 md:w-32 lg:h-40 lg:w-40" />
+          )}
+        </div>
+        <div className="section-header-text">
+          <h1>{title}</h1>
+          {description && <p>{description}</p>}
+        </div>
       </div>
-      <div className="h-4 bg-black" />
+      <div className="section-divider" />
     </div>
   );
 }

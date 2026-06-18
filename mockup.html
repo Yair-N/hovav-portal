@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup — Homepage</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
+
+  @font-face {
+    font-family: 'KtavYad';
+    src: url('src/fonts/ktav-yad-medium-italic.ttf') format('truetype');
+    font-display: swap;
+  }
+
+  :root {
+    --hovav-header-blue: #c4e0ed;
+    --hovav-cream: #f5e8c2;
+    --hovav-sports-gray: #ebe4e4;
+    --hovav-bar-black: #000000;
+    --hovav-footer-beige: #f5f5ef;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Rubik', sans-serif;
+    color: #171717;
+    background: #fff;
+  }
+
+  /* ── Nav ──────────────────────────────────────────────────────────── */
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: white;
+    border-bottom: 1px solid rgb(0 0 0 / 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 2rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .site-header .logo { font-size: 1rem; font-weight: 700; }
+  .site-header nav { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .site-header nav a { text-decoration: none; color: inherit; }
+  .site-header nav a:hover { text-decoration: underline; }
+
+  /* ── Hero (matching real app layout) ─────────────────────────────── */
+
+  #hero {
+    background: var(--hovav-header-blue);
+    height: 30vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-corkboard {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-corkboard img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+  }
+
+  .hero-text {
+    position: absolute;
+    right: 2%;
+    top: 0;
+    width: 29%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: right;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(1.5rem, 4vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .hero-text p {
+    font-size: clamp(0.7rem, 1.8vw, 1.5rem);
+    margin-top: 0.25rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-style: italic;
+  }
+
+  .hero-text p img { height: 2em; width: auto; }
+
+  /* ── Whiteboard ──────────────────────────────────────────────────── */
+
+  .whiteboard {
+    position: relative;
+    background: #f8f8f5;
+    border: 12px solid #c9c9c9;
+    margin: 1.5rem auto;
+    max-width: 900px;
+    min-height: 20vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    box-shadow:
+      inset 0 0 40px rgba(0,0,0,0.06),
+      0 8px 30px rgba(0,0,0,0.12);
+  }
+
+  /* Glossy reflection */
+  .whiteboard::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(255,255,255,0.6), transparent 35%),
+      linear-gradient(120deg, rgba(255,255,255,0.3), transparent 40%);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* Marker tray */
+  .whiteboard::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 10%;
+    width: 80%;
+    height: 8px;
+    background: linear-gradient(#bbb, #aaa);
+    border-radius: 0 0 4px 4px;
+    z-index: 6;
+  }
+
+  .whiteboard-text {
+    font-family: 'KtavYad', cursive;
+    font-size: 1.75rem;
+    color: #222;
+    direction: rtl;
+    padding: 2rem 3rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .whiteboard-text.writing {
+    animation: write-in 1.5s ease-out forwards;
+  }
+
+  @keyframes write-in {
+    from { clip-path: inset(0 0 0 100%); }
+    to { clip-path: inset(0 0 0 0); }
+  }
+
+  /* Fade-cover: follows eraser to hide text */
+  .whiteboard-fade {
+    position: absolute;
+    width: 0;
+    height: 100%;
+    top: 0;
+    right: 0;
+    background: rgba(248, 248, 245, 0.92);
+    filter: blur(8px);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .whiteboard-fade.wiping {
+    animation: wipe-cover 2.8s ease-in-out forwards;
+  }
+
+  @keyframes wipe-cover {
+    0%   { width: 0; right: 0; opacity: 0; }
+    10%  { opacity: 1; }
+    100% { width: 110%; opacity: 1; }
+  }
+
+  /* Smudge streaks left by eraser */
+  .whiteboard-smudge {
+    position: absolute;
+    width: 80%;
+    height: 60%;
+    top: 20%;
+    left: 10%;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.06) 0px,
+        rgba(0,0,0,0.03) 3px,
+        transparent 8px
+      );
+    filter: blur(4px);
+  }
+
+  .whiteboard-smudge.visible {
+    animation: show-smudge 2.5s ease forwards;
+  }
+
+  @keyframes show-smudge {
+    0%   { opacity: 0; transform: translateX(30px); }
+    30%  { opacity: 0.7; }
+    100% { opacity: 0.15; transform: translateX(-30px); }
+  }
+
+  /* Eraser block */
+  .whiteboard-eraser {
+    position: absolute;
+    width: 100px;
+    height: 45px;
+    background: linear-gradient(#eee, #ccc);
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    top: 50%;
+    right: -130px;
+    transform: translateY(-50%) rotate(-6deg);
+    pointer-events: none;
+    z-index: 4;
+  }
+
+  .whiteboard-eraser::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    background: #3d3d3d;
+    border-radius: 5px;
+  }
+
+  .whiteboard-eraser.moving {
+    animation: eraser-move 2.8s ease-in-out forwards;
+  }
+
+  /* Eraser wobbles across RTL (right to left) */
+  @keyframes eraser-move {
+    0%   { right: -130px; top: 45%; transform: translateY(-50%) rotate(-6deg); }
+    20%  { right: 15%;    top: 48%; transform: translateY(-50%) rotate(4deg); }
+    50%  { right: 45%;    top: 44%; transform: translateY(-50%) rotate(-5deg); }
+    75%  { right: 70%;    top: 50%; transform: translateY(-50%) rotate(3deg); }
+    100% { right: 110%;   top: 46%; transform: translateY(-50%) rotate(-4deg); }
+  }
+
+  @media (min-width: 768px) {
+    .whiteboard { min-height: 15vh; }
+  }
+
+  /* ── Categories ──────────────────────────────────────────────────── */
+
+  .categories {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 1rem 2rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 767px) {
+    .categories { grid-template-columns: 1fr; }
+  }
+
+  .category {
+    background: var(--hovav-header-blue);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+
+  .category-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .category-desc {
+    font-size: 0.875rem;
+    color: #444;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
+
+  .preview-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .preview-card {
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+
+  .preview-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .preview-card-img {
+    width: 100%;
+    aspect-ratio: 1;
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .preview-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .preview-card-label {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .preview-card-desc {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    color: #444;
+    line-height: 1.5;
+  }
+
+  /* ── Divider ─────────────────────────────────────────────────────── */
+
+  .bar {
+    height: 0.5rem;
+    background: var(--hovav-bar-black);
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Nav ──────────────────────────────────────────────────────────── -->
+<header class="site-header">
+  <span class="logo">מחוברים בחוב"ב</span>
+  <nav>
+    <a href="#news">חדשות מהשטח</a>
+    <a href="#jokes">כאן צוחקים</a>
+    <a href="#thoughts">כאן חושבים</a>
+    <a href="#games">כאן משחקים</a>
+    <a href="#behind-the-scenes">חוב"ב מאחורי הקלעים</a>
+    <a href="#opinions">מה דעתי</a>
+    <a href="#comics">פינת הקומיקס</a>
+    <a href="#recommendations">פינת ההמלצות</a>
+    <a href="#recipes">מתכונים בקטנה</a>
+    <a href="#sports">חוב"ב על המגרש</a>
+  </nav>
+</header>
+
+<!-- ── Hero ─────────────────────────────────────────────────────────── -->
+<div id="hero">
+  <div class="hero-corkboard">
+    <img src="public/corkboard.png" alt="לוח שעם">
+  </div>
+  <div class="hero-text">
+    <h1>מחוברים<br>בחוב"ב</h1>
+    <p>
+      הקול של התלמידים.ות
+      <img src="public/microphone.png" alt="מיקרופון">
+    </p>
+  </div>
+</div>
+
+<div class="bar"></div>
+
+<!-- ── Whiteboard ───────────────────────────────────────────────────── -->
+<div class="whiteboard">
+  <div class="whiteboard-text writing">לוח מודעות — הודעות מערכת ועדכונים חשובים יופיעו כאן</div>
+  <div class="whiteboard-smudge"></div>
+  <div class="whiteboard-fade"></div>
+  <div class="whiteboard-eraser"></div>
+</div>
+
+<!-- ── Category sections ───────────────────────────────────────────── -->
+<div class="categories">
+
+  <!-- Right: שעה גמישה -->
+  <div class="category">
+    <div class="category-title">חוב"ב בשעה גמישה</div>
+    <div class="category-desc">
+      מה באמת קורה בבית החינוך שלנו? כתבי וכתבות מחוברים מביאים לכם את הסקופים הרותחים, הדיווחים מהרגעיות והאירועים שאסור לכם לפספס (ואם בכל זאת פספסתם, תקראו עליהם כאן)
+    </div>
+    <div class="preview-cards">
+      <a href="#thoughts" class="preview-card">
+        <div class="preview-card-img"><img src="public/thoughts-header.png" alt=""></div>
+        <div class="preview-card-label">כאן חושבים</div>
+        <div class="preview-card-desc">רוצים להפעיל את הראש? כאן תמצאו חידות, חקירות ומשעשעות שיתנו לכם לחשוב ולהסיק מסקנות. מוכנים לאתגר?</div>
+      </a>
+      <a href="#jokes" class="preview-card">
+        <div class="preview-card-img"><img src="public/jokes-header.png" alt=""></div>
+        <div class="preview-card-label">כאן צוחקים</div>
+        <div class="preview-card-desc">כי הצחוק הוא הרפואה הטובה ביותר. לחצו כאן ותתחילו לצחוק</div>
+      </a>
+      <a href="#games" class="preview-card">
+        <div class="preview-card-img"><img src="public/games-header.png" alt=""></div>
+        <div class="preview-card-label">כאן משחקים</div>
+        <div class="preview-card-desc">תלמידי שכבות ד׳-ו׳ יצרו עבורכם משחקים לימודיים אינטראקטיביים בנושא חלל, לכיתות ב-ג</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Left: שעת תרבות -->
+  <div class="category">
+    <div class="category-title">חוב"ב בשעת תרבות</div>
+    <div class="category-desc">
+      כל מה שקורה בשעות התרבות — מהבמה ועד מאחורי הקלעים
+    </div>
+    <div class="preview-cards">
+      <a href="#opinions" class="preview-card">
+        <div class="preview-card-img"><img src="public/thoughts-header.png" alt=""></div>
+        <div class="preview-card-label">מה דעתי</div>
+        <div class="preview-card-desc">פינת הקורי השבועית שלנו בנושאים הרלוונטיים באמת לחיינו. חולקים את דעתנו? היגיבו והשפיעו</div>
+      </a>
+      <a href="#comics" class="preview-card">
+        <div class="preview-card-img"><img src="public/comics-header.png" alt=""></div>
+        <div class="preview-card-label">פינת הקומיקס השבועית</div>
+        <div class="preview-card-desc">כי התמונה אומרת אלף מילים. הרומנטיקה של בית הספר בקריקטורות</div>
+      </a>
+      <a href="#recommendations" class="preview-card">
+        <div class="preview-card-img"><img src="public/recommendations-header.png" alt=""></div>
+        <div class="preview-card-label">כל מה שמעניין אותו</div>
+        <div class="preview-card-desc">מחפשים את הספר הבא? הסרט הבא? ילדי בית הספר יודעים. הדברים הכי שווים שיש</div>
+      </a>
+      <a href="#recipes" class="preview-card">
+        <div class="preview-card-img"><img src="public/recipes-header.png" alt=""></div>
+        <div class="preview-card-label">מתכונים בקטנה</div>
+        <div class="preview-card-desc">מתכונים קלים וטעימים שגם אתם יכולים להכין בבית</div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Whiteboard animation demo ───────────────────────────────────── -->
+<script>
+  const messages = [
+    'לוח מודעות — הודעות מערכת ועדכונים חשובים יופיעו כאן',
+    'שימו לב! מחר יום ספורט — להגיע עם בגדי ספורט',
+    'מזל טוב לכיתה ד׳2 על הזכייה בתחרות!',
+  ];
+  let idx = 0;
+  const textEl = document.querySelector('.whiteboard-text');
+  const eraserEl = document.querySelector('.whiteboard-eraser');
+  const fadeEl = document.querySelector('.whiteboard-fade');
+  const smudgeEl = document.querySelector('.whiteboard-smudge');
+
+  function resetAnim(el, cls) {
+    el.classList.remove(cls);
+    el.offsetHeight;
+    el.classList.add(cls);
+  }
+
+  setInterval(() => {
+    // 1. Eraser moves across + fade cover follows (2.8s)
+    resetAnim(eraserEl, 'moving');
+    resetAnim(fadeEl, 'wiping');
+
+    // 2. Show smudge streaks partway through
+    setTimeout(() => {
+      resetAnim(smudgeEl, 'visible');
+    }, 400);
+
+    // 3. Erase done — reset everything, write new message
+    setTimeout(() => {
+      eraserEl.classList.remove('moving');
+      fadeEl.classList.remove('wiping');
+      smudgeEl.classList.remove('visible');
+
+      // Clear the fade
+      fadeEl.style.width = '0';
+
+      idx = (idx + 1) % messages.length;
+      textEl.textContent = messages[idx];
+      resetAnim(textEl, 'writing');
+    }, 3200);
+  }, 6000);
+</script>
+
+</body>
+</html>

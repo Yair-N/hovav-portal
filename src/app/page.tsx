@@ -1,145 +1,301 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import NewsCard from "@/components/NewsCard";
-import SectionPreviewCard from "@/components/SectionPreviewCard";
+import ComicCard from "@/components/ComicCard";
+import GameCard from "@/components/GameCard";
+import OpinionCard from "@/components/OpinionCard";
+import RecommendationCard from "@/components/RecommendationCard";
 import TextHighlightCard from "@/components/TextHighlightCard";
-import { getFeaturedNewsItem, getSiteSettings, getSportsHighlights } from "@/sanity/queries";
+import PageHeader from "@/components/PageHeader";
+import Whiteboard from "@/components/Whiteboard";
+import {
+  getNewsItems,
+  getJokes,
+  getThoughts,
+  getGames,
+  getBehindTheScenes,
+  getOpinions,
+  getComics,
+  getRecommendations,
+  getRecipes,
+  getSportsHighlights,
+} from "@/sanity/queries";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [featuredNewsItem, siteSettings, sportsHighlights] = await Promise.all([
-    getFeaturedNewsItem(),
-    getSiteSettings(),
+  const [
+    news, jokes, thoughts, games, behindTheScenes,
+    opinions, comics, recommendations, recipes, sports,
+  ] = await Promise.all([
+    getNewsItems(),
+    getJokes(),
+    getThoughts(),
+    getGames(),
+    getBehindTheScenes(),
+    getOpinions(),
+    getComics(),
+    getRecommendations(),
+    getRecipes(),
     getSportsHighlights(),
   ]);
-  const sectionPreviewsGroup1 = siteSettings.flexibleHourSections;
-  const sectionPreviewsGroup2 = siteSettings.cultureSections;
+
   return (
     <div>
-      {/* ── Section 0: Hero ─────────────────────────────────────────────────
-          Source: Canva section PBfLYqYMWctwC793, canvas 1039×838.958px.
-          Single section — black bar is INSIDE at 32.7% from top.
-          Corkboard: left 50%, 44.6% tall, z-10 (overlaps the black bar).
-          Title+tagline: upper-right corner.
-          CTA button: inside black bar, 3% from right edge. */}
-              <section
-          className="relative flex flex-col md:block overflow-hidden bg-hovav-header-blue"
-          style={{ minHeight: 'calc(100vh - 61px)' }}
-        >
-          {/* Corkboard image ── below title on mobile, left half on desktop */}
-          <div
-            className="relative w-full aspect-video max-h-[30vh] order-2 md:order-none md:max-h-none md:absolute md:left-0 md:top-0 md:w-1/2 md:aspect-auto md:h-[calc((100vh_-_61px)_*_0.446)] z-10 md:flex md:items-center md:justify-center"
-          >
-            <Image
-              src="/corkboard.png"
-              alt="לוח שעם"
-              fill
-              className="object-contain object-center"
-            />
-          </div>
-
-          {/* Title + tagline ── first on mobile, upper-right on desktop */}
-          <div
-            className="flex flex-col justify-center px-6 py-8 text-right order-1 md:order-none md:absolute md:right-[2%] md:top-0 md:w-[29%] md:px-0 md:py-0
-  md:h-[calc((100vh_-_61px)_*_0.446)]"
-          >
-            <h1
-              className="font-heading leading-tight"
-              style={{ fontSize: 'clamp(2.5rem, min(calc((100vh - 61px) * 0.13), 10vw), 10rem)' }}
-            >
-            מחוברים<br />בחוב&quot;ב
-           </h1>
-            <p
-              className="font-handwriting whitespace-nowrap flex items-center gap-2"
-              style={{ fontSize: 'clamp(1.125rem, min(calc((100vh - 61px) * 0.05), 4vw), 3.5rem)' }}
-            >
-            הקול של התלמידים.ות
-              <Image src="/microphone.png" alt="מיקרופון" width={200} height={200} className="inline-block h-[2.5em] w-auto" />
-            </p>
-          </div>
-
-          {/* Black bar */}
-          <div
-            className="h-4 bg-black order-3 md:order-none md:absolute md:left-0 md:right-0 md:z-0 md:top-[calc((100vh_-_61px)_*_0.446)]"
+      {/* ── Hero ──────────────────────────────────────────────────────────── */}
+      <section id="hero">
+        <div className="hero-corkboard">
+          <Image
+            src="/corkboard.png"
+            alt="לוח שעם"
+            fill
+            className="object-contain object-center"
           />
-      </section>
-
-      {/* ── Section 1: חדשות מהשטח ──────────────────────────────────────────
-          Canva: sports-gray bg, title (underlined link, right-aligned),
-          description paragraph (full width), featured article card (left),
-          "קישור לכתבות" link (center-left). */}
-      <section className="min-h-screen flex flex-col justify-center bg-hovav-sports-gray px-6 py-12 md:px-12">
-        <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl text-end mb-6">
-          <Link href="/news" className="underline">חדשות מהשטח</Link>
-        </h2>
-        <p className="mb-8 max-w-2xl leading-relaxed text-black/70">
-          מה באמת קורה בבית החינוך שלנו? כתבי וכתבות מחוברים מביאים לכם את הסקופים החמים,
-          הדיווחים מההפסקות והאירועים שאסור לכם לפספס ואם בכל זאת פספסתם, תקראו עליהם כאן.
-        </p>
-        {featuredNewsItem && (
-          <div className="max-w-sm mb-8">
-            <NewsCard item={featuredNewsItem} />
-          </div>
-        )}
-        <Link href="/news" className="text-lg font-medium underline">
-          קישור לכתבות שאנחנו רוצים לחשוף
-        </Link>
-      </section>
-
-      {/* ── Section 2: חוב"ב בשעה גמישה ────────────────────────────────────
-          Canva: blue bg, centered h2, 3-column grid:
-          כאן משחקים | כאן צוחקים | כאן חושבים — each: image + title link + description. */}
-      <section className="min-h-screen flex flex-col justify-center bg-hovav-header-blue px-6 py-12 md:px-12">
-        <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl text-center mb-10">חוב&quot;ב בשעה גמישה</h2>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {sectionPreviewsGroup1.map((item) => (
-            <SectionPreviewCard key={item.id} item={item} />
-          ))}
         </div>
-      </section>
 
-      {/* ── Section 3: חוב"ב מאחורי הקלעים preview ─────────────────────────
-          Canva: sports-gray bg, illustration image left, title+subtitle+description+link right. */}
-      <section className="min-h-screen flex flex-col items-center gap-6 md:flex-row md:items-center md:gap-10 bg-hovav-sports-gray px-6 py-12 md:px-16">
-        <Image
-          src="/behind-the-scenes-header.png"
-          alt="חדר מורים"
-          width={224}
-          height={160}
-          className="w-full max-w-xs rounded-md object-cover md:h-40 md:w-56 md:shrink-0"
-        />
-        <div className="flex flex-col gap-3 w-full">
-          <h2 className="font-heading text-2xl md:text-3xl">חוב&quot;ב מאחורי הקלעים</h2>
-          <p className="text-lg font-semibold">אנחנו שאלנו והם ענו</p>
-          <p className="leading-relaxed text-black/70">
-            חשבתם שאתם יודעים עליהם הכל? תחשבו שוב. הכתבים שלנו ישבו לשיחה אישית עם הפנים
-            המוכרות בבית הספר, מורים, תלמידים ואנשי צוות, וחזרו לגלות צדדים שלא הכרתם.
+        <div className="hero-text">
+          <h1 className="hero-title">
+            מחוברים<br />בחוב&quot;ב
+          </h1>
+          <p className="hero-subtitle">
+            הקול של התלמידים.ות
+            <Image src="/microphone.png" alt="מיקרופון" width={200} height={200} className="inline-block h-[2.5em] w-auto" />
           </p>
-          <Link href="/behind-the-scenes" className="font-medium underline">
-            קישור לכתבות שאנחנו רוצים לחשוף
+        </div>
+
+        <div className="hero-divider" />
+        <div className="hero-spacer" />
+
+        <div className="hero-below">
+    <div className="wb-frame"><Whiteboard /></div>
+
+    {/* ── Categories ─────────────────────────────────────────────── */}
+    <div className="categories">
+      <div className="category">
+        <div className="category-title">חוב&quot;ב בשעה גמישה</div>
+        <p className="category-desc">
+          מה באמת קורה בבית החינוך שלנו? כתבי וכתבות מחוברים מביאים לכם את
+          הסקופים הרותחים, הדיווחים מהרגעיות והאירועים שאסור לכם לפספס
+          (ואם בכל זאת פספסתם, תקראו עליהם כאן)
+        </p>
+
+        <div className="preview-cards">
+          <Link href="/#thoughts" className="preview-card">
+            <div className="preview-card-img">
+              <Image
+                src="/thoughts-header.png"
+                alt=""
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="preview-card-label">כאן חושבים</div>
+            <p className="preview-card-desc">
+              רוצים להפעיל את הראש? כאן תמצאו חידות, חקירות ומשעשעות שיתנו
+              לכם לחשוב ולהסיק מסקנות
+            </p>
+          </Link>
+
+          <Link href="/#jokes" className="preview-card">
+            <div className="preview-card-img">
+              <Image
+                src="/jokes-header.png"
+                alt=""
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="preview-card-label">כאן צוחקים</div>
+            <p className="preview-card-desc">
+              כי הצחוק הוא הרפואה הטובה ביותר. לחצו כאן ותתחילו לצחוק
+            </p>
+          </Link>
+
+          <Link href="/#games" className="preview-card">
+            <div className="preview-card-img">
+              <Image
+                src="/games-header.png"
+                alt=""
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="preview-card-label">כאן משחקים</div>
+            <p className="preview-card-desc">
+              תלמידי שכבות ד׳-ו׳ יצרו עבורכם משחקים לימודיים אינטראקטיביים
+            </p>
           </Link>
         </div>
+      </div>
+
+      <div className="category">
+        <div className="category-title">חוב&quot;ב בשעת תרבות</div>
+        <p className="category-desc">
+          כל מה שקורה בשעות התרבות — מהבמה ועד מאחורי הקלעים
+        </p>
+
+        <div className="preview-cards">
+          <Link href="/#opinions" className="preview-card">
+            <div className="preview-card-img">
+              <Image
+                src="/thoughts-header.png"
+                alt=""
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="preview-card-label">מה דעתי</div>
+            <p className="preview-card-desc">
+              פינת הקורי השבועית שלנו בנושאים הרלוונטיים באמת לחיינו.
+              חולקים את דעתנו? היגיבו והשפיעו
+            </p>
+          </Link>
+
+          <Link href="/#comics" className="preview-card">
+            <div className="preview-card-img">
+              <Image
+                src="/comics-header.png"
+                alt=""
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="preview-card-label">פינת הקומיקס השבועית</div>
+            <p className="preview-card-desc">
+              כי התמונה אומרת אלף מילים. הרומנטיקה של בית הספר בקריקטורות
+            </p>
+          </Link>
+
+          <Link href="/#recommendations" className="preview-card">
+            <div className="preview-card-img">
+              <Image
+                src="/recommendations-header.png"
+                alt=""
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="preview-card-label">כל מה שמעניין אותו</div>
+            <p className="preview-card-desc">
+              מחפשים את הספר הבא? הסרט הבא? ילדי בית הספר יודעים
+            </p>
+          </Link>
+
+          <Link href="/#recipes" className="preview-card">
+            <div className="preview-card-img">
+              <Image
+                src="/recipes-header.png"
+                alt=""
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="preview-card-label">מתכונים בקטנה</div>
+            <p className="preview-card-desc">
+              מתכונים קלים וטעימים שגם אתם יכולים להכין בבית
+            </p>
+          </Link>
+        </div>
+      </div>
+          </div>
+        </div>
       </section>
 
-      {/* ── Section 4: חוב"ב בשעת תרבות ────────────────────────────────────
-          Canva: blue bg, centered h2, 4-column grid:
-          מתכונים | המלצות | קומיקס | מה דעתי — each: image + title link + description. */}
-      <section className="min-h-screen flex flex-col justify-center bg-hovav-header-blue px-6 py-12 md:px-12">
-        <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl text-center mb-10">חוב&quot;ב בשעת תרבות</h2>
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-          {sectionPreviewsGroup2.map((item) => (
-            <SectionPreviewCard key={item.id} item={item} />
+      {/* ── חדשות מהשטח ───────────────────────────────────────────────────── */}
+      <section id="news">
+        <PageHeader title="חדשות מהשטח" image="/news-header.png" />
+        <div className="section-content grid grid-cols-1 md:grid-cols-3">
+          {news.map((item) => (
+            <NewsCard key={item.id} item={item} />
           ))}
         </div>
       </section>
 
-      {/* ── Section 5: חוב"ב על המגרש ───────────────────────────────────────
-          Canva: sports-gray bg, h2 right-aligned, 2-column text cards. */}
-      <section className="min-h-screen flex flex-col justify-center bg-hovav-sports-gray px-6 py-12 md:px-12">
-        <h2 className="font-heading text-2xl md:text-3xl mb-8">חוב&quot;ב על המגרש</h2>
-        <div className="grid gap-8 md:grid-cols-2">
-          {sportsHighlights.map((item) => (
+      {/* ── כאן צוחקים ────────────────────────────────────────────────────── */}
+      <section id="jokes">
+        <PageHeader title="כאן צוחקים" image="/jokes-header.png" />
+        <div className="section-content grid grid-cols-1 md:grid-cols-3">
+          {jokes.map((item) => (
+            <ComicCard key={item.id} item={item} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── כאן חושבים ────────────────────────────────────────────────────── */}
+      <section id="thoughts">
+        <PageHeader title="כאן חושבים" image="/thoughts-header.png" />
+        <div className="section-content flex flex-col">
+          {thoughts.map((item) => (
+            <OpinionCard key={item.id} item={item} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── כאן משחקים ────────────────────────────────────────────────────── */}
+      <section id="games">
+        <PageHeader title="כאן משחקים" image="/games-header.png" />
+        <div className="section-content grid grid-cols-2 md:grid-cols-4">
+          {games.map((item) => (
+            <GameCard key={item.id} item={item} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── מאחורי הקלעים ─────────────────────────────────────────────────── */}
+      <section id="behind-the-scenes">
+        <PageHeader title={'חוב"ב מאחורי הקלעים'} image="/behind-the-scenes-header.png" />
+        <div className="section-content flex flex-col">
+          {behindTheScenes.map((item) => (
+            <TextHighlightCard key={item.id} item={item} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── מה דעתי ───────────────────────────────────────────────────────── */}
+      <section id="opinions">
+        <PageHeader title="מה דעתי" />
+        <div className="section-content flex flex-col">
+          {opinions.map((item) => (
+            <OpinionCard key={item.id} item={item} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── קומיקס ────────────────────────────────────────────────────────── */}
+      <section id="comics">
+        <PageHeader title="פינת הקומיקס השבועית" image="/comics-header.png" />
+        <div className="section-content grid grid-cols-1 md:grid-cols-3">
+          {comics.map((item) => (
+            <ComicCard key={item.id} item={item} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── המלצות ────────────────────────────────────────────────────────── */}
+      <section id="recommendations">
+        <PageHeader title="פינת ההמלצות" image="/recommendations-header.png" />
+        <div className="section-content grid grid-cols-2 md:grid-cols-4">
+          {recommendations.map((item) => (
+            <RecommendationCard key={item.id} item={item} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── מתכונים ───────────────────────────────────────────────────────── */}
+      <section id="recipes">
+        <PageHeader title="מתכונים בקטנה" image="/recipes-header.png" />
+        <div className="section-content grid grid-cols-2 md:grid-cols-4">
+          {recipes.map((item) => (
+            <RecommendationCard key={item.id} item={item} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── על המגרש ──────────────────────────────────────────────────────── */}
+      <section id="sports">
+        <PageHeader title={'חוב"ב על המגרש'} />
+        <div className="section-content grid md:grid-cols-2">
+          {sports.map((item) => (
             <TextHighlightCard key={item.id} item={item} />
           ))}
         </div>
