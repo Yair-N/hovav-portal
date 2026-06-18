@@ -1,8 +1,11 @@
 import PageHeader from "@/components/PageHeader";
 import OpinionCard from "@/components/OpinionCard";
-import { opinionItems } from "@/lib/placeholder-data";
+import { getOpinions } from "@/sanity/queries";
 
-export default function OpinionsPage() {
+export const revalidate = 60;
+
+export default async function OpinionsPage() {
+  const opinionItems = await getOpinions();
   return (
     <div>
       <PageHeader title="מה דעתי" />

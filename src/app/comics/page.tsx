@@ -1,11 +1,14 @@
 import PageHeader from "@/components/PageHeader";
 import ComicCard from "@/components/ComicCard";
-import { comicItems } from "@/lib/placeholder-data";
+import { getComics } from "@/sanity/queries";
 
-export default function ComicsPage() {
+export const revalidate = 60;
+
+export default async function ComicsPage() {
+  const comicItems = await getComics();
   return (
     <div>
-      <PageHeader title="פינת הקומיקס השבועית" image="/Screenshot 2026-06-16 231042.png" />
+      <PageHeader title="פינת הקומיקס השבועית" image="/comics-header.png" />
       <section className="bg-hovav-cream grid grid-cols-1 gap-10 px-6 py-12 md:grid-cols-3 md:px-12">
         {comicItems.map((item) => (
           <ComicCard key={item.id} item={item} />

@@ -10,9 +10,6 @@ const hebrewFont = Rubik({
   subsets: ["hebrew", "latin"],
 });
 
-// Closest free stand-in for the Canva design's "Charzuvot" headline font
-// (a Canva-exclusive font that can't be legally extracted/embedded here).
-// Used only for headings; body text stays on Rubik.
 const headingFont = localFont({
   src: [
     { path: "../fonts/gan-bold.woff", weight: "700" },
@@ -22,8 +19,6 @@ const headingFont = localFont({
   display: "swap",
 });
 
-// Same font Canva used for the handwritten-style tagline (KtavYadCLM, part
-// of the GPL-licensed Culmus Hebrew font project) — free to use as-is.
 const handwritingFont = localFont({
   src: "../fonts/ktav-yad-medium-italic.ttf",
   variable: "--font-handwriting",

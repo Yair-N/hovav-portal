@@ -96,7 +96,7 @@ export const sectionPreviewsGroup1: SectionPreview[] = [
     title: "כאן צוחקים",
     description:
       "יום בלי צחוק הוא יום מבוזבז! אספנו עבורכם את הבדיחות, הבלגנים ורגעי הצחוק הכי שווים.",
-    image: "/Screenshot 2026-06-16 231008.png",
+    image: "/jokes-header.png",
   },
   {
     id: "g3",
@@ -115,7 +115,7 @@ export const sectionPreviewsGroup2: SectionPreview[] = [
     title: "מתכונים בקטנה",
     description:
       "רעבים? קבלו מתכונים טעימים בטירוף שקל להכין (וממש מהר). אזהרה: צפיה בתמונות מעוררת תיאבון!",
-    image: "/Screenshot 2026-06-16 231029.png",
+    image: "/recipes-header.png",
   },
   {
     id: "c2",
@@ -123,7 +123,7 @@ export const sectionPreviewsGroup2: SectionPreview[] = [
     title: "כל מה שמעניין אותנו",
     description:
       "מחפשים את הספר הבא? הסרט הכי מרתק? או המשחק שכולם מדברים עליו? הכנסו לפינת ההמלצות שלנו.",
-    image: "/Screenshot 2026-06-16 231035.png",
+    image: "/recommendations-header.png",
   },
   {
     id: "c3",
@@ -131,7 +131,7 @@ export const sectionPreviewsGroup2: SectionPreview[] = [
     title: "פינת הקומיקס השבועית",
     description:
       "כי תמונה אחת שווה אלף מילים: הכישרונות הגדולים של בית הספר בקומיקסים מקוריים, מצחיקים ומרגשים.",
-    image: "/Screenshot 2026-06-16 231042.png",
+    image: "/comics-header.png",
   },
   {
     id: "c4",
@@ -139,7 +139,7 @@ export const sectionPreviewsGroup2: SectionPreview[] = [
     title: "מה דעתי",
     description:
       "פינת הסקר השבועית שלנו בנושאים החשובים באמת (שוקולד או וניל, חתולים או כלבים ועוד). הצביעו והשפיעו.",
-    image: "/Screenshot 2026-06-16 230944.png",
+    image: "/thoughts-header.png",
   },
 ];
 
