@@ -4,15 +4,16 @@ import PageHeader from "@/components/PageHeader";
 import Whiteboard from "@/components/Whiteboard";
 import ArticleCard from "@/components/ArticleCard";
 import Carousel from "@/components/Carousel";
-import { getSectionConfigs, getSectionItems, getHomepageCategories, getCarouselItems } from "@/sanity/queries";
+import { getSectionConfigs, getSectionItems, getHomepageCategories, getCarouselItems, getWhiteboardMessages } from "@/sanity/queries";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [sections, categories, carouselItems] = await Promise.all([
+  const [sections, categories, carouselItems, whiteboardMessages] = await Promise.all([
     getSectionConfigs(),
     getHomepageCategories(),
     getCarouselItems(),
+    getWhiteboardMessages(),
   ]);
 
   const newsConfig = sections.find((s) => s.slug === "news" && s.isVisible);
@@ -47,7 +48,7 @@ export default async function HomePage() {
 
         <div className="hero-below">
           <div className="hero-feature-row">
-            <div className="wb-frame"><Whiteboard /></div>
+            <div className="wb-frame"><Whiteboard messages={whiteboardMessages} /></div>
             {carouselItems.length > 0 && <Carousel items={carouselItems} />}
           </div>
         </div>

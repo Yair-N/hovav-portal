@@ -98,6 +98,7 @@ export interface SectionItem {
   ageGroup?: string;
   caption?: string;
   category?: string;
+  linkPrefix?: string;
 }
 
 /** A preview card shown in the homepage category sections. */

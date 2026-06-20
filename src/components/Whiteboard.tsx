@@ -2,13 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const messages = [
-  "לוח מודעות — הודעות מערכת ועדכונים חשובים יופיעו כאן",
-  "שימו לב! מחר יום ספורט — להגיע עם בגדי ספורט",
-  "מזל טוב לכיתה ד׳2 על הזכייה בתחרות!",
-];
-
-export default function Whiteboard() {
+export default function Whiteboard({ messages }: { messages: string[] }) {
   const [idx, setIdx] = useState(0);
   const textRef = useRef<HTMLDivElement>(null);
   const eraserRef = useRef<HTMLDivElement>(null);
@@ -16,6 +10,8 @@ export default function Whiteboard() {
   const smudgeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (messages.length <= 1) return;
+
     const interval = setInterval(() => {
       const eraser = eraserRef.current;
       const fade = fadeRef.current;
@@ -45,7 +41,7 @@ export default function Whiteboard() {
     }, 6000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [messages.length]);
 
   return (
     <div className="wb">

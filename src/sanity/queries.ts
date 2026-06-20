@@ -269,14 +269,44 @@ const CONTENT_QUERIES: Record<string, string> = {
   opinion: `*[_type == "opinion"] | order(publishedAt desc) { _id, title, body, bodyRich, author, image, publishedAt }`,
   comic: `*[_type == "comic"] | order(publishedAt desc) { _id, title, image, caption, captionRich, author, publishedAt }`,
   recommendation: `*[_type == "recommendation"] | order(_createdAt desc) { _id, title, description, descriptionRich, category, image, author }`,
-  recipe: `*[_type == "recipe"] | order(_createdAt desc) { _id, title, description, descriptionRich, category, image, author }`,
+  recipe: `*[_type == "recipe"] | order(_createdAt desc) { _id, "slug": slug.current, title, description, descriptionRich, bodyRich, category, image, author }`,
   sportsHighlight: `*[_type == "sportsHighlight"] | order(_createdAt desc) { _id, title, body, bodyRich }`,
+}
+
+// ---------------------------------------------------------------------------
+// Single recipe by slug
+// ---------------------------------------------------------------------------
+
+const RECIPE_BY_SLUG_QUERY = `*[_type == "recipe" && slug.current == $slug][0] {
+  _id, "slug": slug.current, title, description, descriptionRich, bodyRich, category, image, author
+}`
+
+export async function getRecipeBySlug(slug: string): Promise<SectionItem | null> {
+  const item = await client.fetch(RECIPE_BY_SLUG_QUERY, { slug })
+  if (!item) return null
+  return {
+    id: item._id as string,
+    slug: item.slug as string,
+    title: item.title as string,
+    description: item.description as string | undefined,
+    descriptionRich: item.descriptionRich as unknown[] | undefined,
+    bodyRich: item.bodyRich as unknown[] | undefined,
+    image: resolveImage(item.image, 800),
+    author: item.author as string | undefined,
+    category: item.category as string | undefined,
+  }
+}
+
+const LINK_PREFIX: Record<string, string> = {
+  newsItem: '/article/',
+  recipe: '/recipe/',
 }
 
 export async function getSectionItems(contentType: string): Promise<SectionItem[]> {
   const query = CONTENT_QUERIES[contentType]
   if (!query) return []
   const items = await client.fetch(query)
+  const prefix = LINK_PREFIX[contentType]
   return items.map((item: Record<string, unknown>) => ({
     id: item._id as string,
     slug: item.slug as string | undefined,
@@ -298,6 +328,7 @@ export async function getSectionItems(contentType: string): Promise<SectionItem[
     ageGroup: item.ageGroup as string | undefined,
     caption: item.caption as string | undefined,
     category: item.category as string | undefined,
+    linkPrefix: prefix,
   }))
 }
 
@@ -343,7 +374,7 @@ const DEFAULT_SECTIONS: SectionConfig[] = [
   { id: 'opinions', slug: 'opinions', title: 'מה דעתי', cardStyle: 'article', order: 6, isVisible: true, contentType: 'opinion' },
   { id: 'comics', slug: 'comics', title: 'פינת הקומיקס השבועית', headerImage: '/comics-header.png', cardStyle: 'article', order: 7, isVisible: false, contentType: 'comic' },
   { id: 'recommendations', slug: 'recommendations', title: 'פינת ההמלצות', headerImage: '/recommendations-header.png', cardStyle: 'link-card', order: 8, isVisible: true, contentType: 'recommendation' },
-  { id: 'recipes', slug: 'recipes', title: 'מתכונים בקטנה', headerImage: '/recipes-header.png', cardStyle: 'link-card', order: 9, isVisible: true, contentType: 'recipe' },
+  { id: 'recipes', slug: 'recipes', title: 'מתכונים בקטנה', headerImage: '/recipes-header.png', cardStyle: 'article', order: 9, isVisible: true, contentType: 'recipe' },
   { id: 'sports', slug: 'sports', title: 'חוב"ב על המגרש', cardStyle: 'article', order: 10, isVisible: true, contentType: 'sportsHighlight' },
 ]
 
@@ -408,7 +439,8 @@ export async function getFooterConfig(): Promise<FooterConfig> {
 const SITE_SETTINGS_QUERY = `*[_type == "siteSettings" && _id == "siteSettings"][0] {
   flexibleHourSections[] { title, href, description, image },
   cultureSections[] { title, href, description, image },
-  carousel[] { image, caption }
+  carousel[] { image, caption },
+  whiteboardMessages
 }`
 
 function mapPreviewCards(items: Record<string, unknown>[] | null): PreviewCard[] {
@@ -454,6 +486,22 @@ export async function getHomepageCategories(): Promise<HomepageCategories> {
 // ---------------------------------------------------------------------------
 // Carousel
 // ---------------------------------------------------------------------------
+
+const DEFAULT_WHITEBOARD_MESSAGES = [
+  'לוח מודעות — הודעות מערכת ועדכונים חשובים יופיעו כאן',
+  'שימו לב! מחר יום ספורט — להגיע עם בגדי ספורט',
+  'מזל טוב לכיתה ד׳2 על הזכייה בתחרות!',
+]
+
+export async function getWhiteboardMessages(): Promise<string[]> {
+  try {
+    const settings = await client.fetch(SITE_SETTINGS_QUERY)
+    if (settings?.whiteboardMessages && Array.isArray(settings.whiteboardMessages) && settings.whiteboardMessages.length > 0) {
+      return settings.whiteboardMessages as string[]
+    }
+  } catch { /* schema not yet created */ }
+  return DEFAULT_WHITEBOARD_MESSAGES
+}
 
 export async function getCarouselItems(): Promise<CarouselItem[]> {
   try {

@@ -6,7 +6,7 @@ import type { SectionItem } from "@/types/content";
 import type { PortableTextBlock } from "@portabletext/types";
 
 export default function ArticleCard({ item }: { item: SectionItem }) {
-  const isNews = !!item.slug;
+  const hasFullPage = !!item.slug && !!item.linkPrefix;
   const richText = item.bodyRich || item.descriptionRich || item.captionRich;
   const plainText = item.excerpt || item.body || item.description || item.caption || "";
 
@@ -28,9 +28,9 @@ export default function ArticleCard({ item }: { item: SectionItem }) {
       <RichText
         value={richText as PortableTextBlock[]}
         fallback={plainText}
-        className={`text-sm leading-relaxed text-black/70${isNews ? " line-clamp-2" : ""}`}
+        className={`text-sm leading-relaxed text-black/70${hasFullPage ? " line-clamp-2" : ""}`}
       />
-      {isNews && (
+      {hasFullPage && (
         <span className="text-sm font-medium text-blue-700 hover:underline">
           להמשך קריאה...
         </span>
@@ -38,8 +38,8 @@ export default function ArticleCard({ item }: { item: SectionItem }) {
     </article>
   );
 
-  if (isNews) {
-    return <Link href={`/article/${item.slug}`}>{card}</Link>;
+  if (hasFullPage) {
+    return <Link href={`${item.linkPrefix}${item.slug}`}>{card}</Link>;
   }
   return card;
 }
