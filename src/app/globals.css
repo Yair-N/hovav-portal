@@ -348,6 +348,104 @@ section.section-page {
   .polaroid { padding: 0.5rem; padding-bottom: 1.75rem; }
 }
 
+/* ── Game cards (link-card style) ──────────────────────────────────── */
+
+.game-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  border-radius: 1.25rem;
+  outline-offset: 4px;
+}
+
+.game-card-link:focus-visible {
+  outline: 2px solid #1447e6;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1.25rem 1.75rem;
+  border-radius: 1.25rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.game-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-card { transition: none; }
+  .game-card:hover { transform: none; }
+}
+
+/* Pastel backgrounds + slight rotation per card */
+.game-grid > :nth-child(6n+1) .game-card { background: #e8f4f8; rotate: -1.2deg; }
+.game-grid > :nth-child(6n+2) .game-card { background: #fef3e2; rotate: 0.8deg; }
+.game-grid > :nth-child(6n+3) .game-card { background: #e8f0e4; rotate: -0.5deg; }
+.game-grid > :nth-child(6n+4) .game-card { background: #f3e8f4; rotate: 1deg; }
+.game-grid > :nth-child(6n+5) .game-card { background: #fde8e8; rotate: -0.7deg; }
+.game-grid > :nth-child(6n+6) .game-card { background: #e8eaf4; rotate: 0.6deg; }
+
+.game-card:hover {
+  rotate: 0deg;
+}
+
+.game-card-icon {
+  transition: transform 0.3s ease;
+}
+
+.game-card:hover .game-card-icon {
+  transform: translateY(-4px) scale(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-card-icon { transition: none; }
+  .game-card:hover .game-card-icon { transform: none; }
+}
+
+.game-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.game-card-meta {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.game-card-desc {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 2rem 1.5rem 3rem;
+}
+
+@media (min-width: 520px) {
+  .game-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 768px) {
+  .game-grid { grid-template-columns: repeat(3, 1fr); padding: 2rem 3rem 3rem; }
+}
+
+@media (min-width: 1024px) {
+  .game-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
 /* ── Whiteboard ────────────────────────────────────────────────────── */
 
 .wb-frame {

@@ -60,7 +60,7 @@ export interface TextHighlight {
 }
 
 /** Card display style for a section. */
-export type CardStyle = "article" | "link-card" | "video";
+export type CardStyle = "article" | "article-compact" | "link-card" | "video";
 
 /** Section configuration — drives layout, nav, and section headers. */
 export interface SectionConfig {

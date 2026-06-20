@@ -374,7 +374,7 @@ const DEFAULT_SECTIONS: SectionConfig[] = [
   { id: 'opinions', slug: 'opinions', title: 'מה דעתי', cardStyle: 'article', order: 6, isVisible: true, contentType: 'opinion' },
   { id: 'comics', slug: 'comics', title: 'פינת הקומיקס השבועית', headerImage: '/comics-header.png', cardStyle: 'article', order: 7, isVisible: false, contentType: 'comic' },
   { id: 'recommendations', slug: 'recommendations', title: 'פינת ההמלצות', headerImage: '/recommendations-header.png', cardStyle: 'link-card', order: 8, isVisible: true, contentType: 'recommendation' },
-  { id: 'recipes', slug: 'recipes', title: 'מתכונים בקטנה', headerImage: '/recipes-header.png', cardStyle: 'article', order: 9, isVisible: true, contentType: 'recipe' },
+  { id: 'recipes', slug: 'recipes', title: 'מתכונים בקטנה', headerImage: '/recipes-header.png', cardStyle: 'article-compact', order: 9, isVisible: true, contentType: 'recipe' },
   { id: 'sports', slug: 'sports', title: 'חוב"ב על המגרש', cardStyle: 'article', order: 10, isVisible: true, contentType: 'sportsHighlight' },
 ]
 

@@ -10,12 +10,14 @@ export const revalidate = 60;
 
 const GRID_CLASS: Record<CardStyle, string> = {
   article: "section-content grid grid-cols-1 md:grid-cols-3",
-  "link-card": "section-content grid grid-cols-2 md:grid-cols-4",
+  "article-compact": "section-content grid grid-cols-2 md:grid-cols-4",
+  "link-card": "game-grid",
   video: "section-content flex flex-col",
 };
 
 const CARD_COMPONENT: Record<CardStyle, typeof ArticleCard> = {
   article: ArticleCard,
+  "article-compact": ArticleCard,
   "link-card": LinkCard,
   video: VideoCard,
 };
