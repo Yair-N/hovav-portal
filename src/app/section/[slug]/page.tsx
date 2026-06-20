@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import PageHeader from "@/components/PageHeader";
 import ArticleCard from "@/components/ArticleCard";
+import ArticleCompactCard from "@/components/ArticleCompactCard";
 import LinkCard from "@/components/LinkCard";
 import VideoCard from "@/components/VideoCard";
 import { getSectionConfigBySlug, getSectionItems } from "@/sanity/queries";
@@ -10,14 +11,14 @@ export const revalidate = 60;
 
 const GRID_CLASS: Record<CardStyle, string> = {
   article: "section-content grid grid-cols-1 md:grid-cols-3",
-  "article-compact": "section-content grid grid-cols-2 md:grid-cols-4",
+  "article-compact": "section-content grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
   "link-card": "game-grid",
   video: "section-content flex flex-col",
 };
 
 const CARD_COMPONENT: Record<CardStyle, typeof ArticleCard> = {
   article: ArticleCard,
-  "article-compact": ArticleCard,
+  "article-compact": ArticleCompactCard,
   "link-card": LinkCard,
   video: VideoCard,
 };
