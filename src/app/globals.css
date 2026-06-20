@@ -155,13 +155,56 @@ body {
   position: relative;
   z-index: 10;
   order: 4;
+  padding: 1.25rem 1rem 2rem;
+}
+
+.hero-feature-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding: 0 1.5rem;
+}
+
+.hero-feature-row .wb-frame {
+  order: 1;
+  margin: 0;
+}
+
+.hero-feature-row .carousel {
+  order: 2;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .hero-feature-row {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.35fr);
+    justify-content: space-evenly;
+    padding: 0 3rem;
+  }
+
+  .hero-feature-row .wb-frame {
+    display: flex;
+    min-height: 360px;
+  }
+
+  .hero-feature-row .wb {
+    flex: 1;
+    min-height: 100%;
+  }
+
+  .hero-feature-row .carousel {
+    height: 100%;
+  }
 }
 
 /* ── Section layout ─────────────────────────────────────────────────── */
 
 section {
-  min-height: calc(100vh - 61px);
   scroll-snap-align: start;
+}
+
+section.section-page {
+  min-height: calc(100vh - 61px);
 }
 
 .section-header {
@@ -484,26 +527,62 @@ section {
   position: relative;
   max-width: 800px;
   margin: 1.5rem auto;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 1rem;
+  padding: 0.5rem;
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .carousel-viewport {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   overflow: hidden;
-  background: #eee;
+  background: #111;
 }
 
 .carousel-slide {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 0.6s ease;
+  transform: translateX(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 .carousel-slide-active {
   opacity: 1;
+}
+
+.carousel-enter-next {
+  animation: carousel-slide-from-left 0.6s ease forwards;
+}
+
+.carousel-enter-prev {
+  animation: carousel-slide-from-right 0.6s ease forwards;
+}
+
+/* RTL: "next" enters from left, "prev" enters from right */
+@keyframes carousel-slide-from-left {
+  from { transform: translateX(-30%); opacity: 0.3; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes carousel-slide-from-right {
+  from { transform: translateX(30%); opacity: 0.3; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+.carousel-slide-bg {
+  filter: blur(20px) brightness(0.7);
+  transform: scale(1.2);
+  z-index: 0;
+}
+
+.carousel-slide-img {
+  z-index: 1;
 }
 
 .carousel-caption {
@@ -573,7 +652,7 @@ section {
   .categories {
     grid-template-columns: repeat(2, minmax(0, 35vw));
     justify-content: space-evenly;
-    padding: 1rem 0 3rem;
+    padding: 1rem 3rem 3rem;
   }
 }
 

@@ -309,6 +309,31 @@ const SECTION_CONFIG_QUERY = `*[_type == "sectionConfig"] | order(order asc) {
   _id, slug, title, description, headerImage, backgroundColor, cardStyle, order, isVisible, contentType
 }`
 
+const SECTION_BY_SLUG_QUERY = `*[_type == "sectionConfig" && slug == $slug][0] {
+  _id, slug, title, description, headerImage, backgroundColor, cardStyle, order, isVisible, contentType
+}`
+
+export async function getSectionConfigBySlug(slug: string): Promise<SectionConfig | null> {
+  try {
+    const item = await client.fetch(SECTION_BY_SLUG_QUERY, { slug })
+    if (item) {
+      return {
+        id: item._id as string,
+        slug: item.slug as string,
+        title: item.title as string,
+        description: item.description as string | undefined,
+        headerImage: resolveImage(item.headerImage, 300),
+        backgroundColor: item.backgroundColor as string | undefined,
+        cardStyle: (item.cardStyle as string) || 'article',
+        order: (item.order as number) || 0,
+        isVisible: item.isVisible !== false,
+        contentType: item.contentType as string,
+      } as SectionConfig
+    }
+  } catch { /* not yet created */ }
+  return DEFAULT_SECTIONS.find((s) => s.slug === slug) || null
+}
+
 const DEFAULT_SECTIONS: SectionConfig[] = [
   { id: 'news', slug: 'news', title: 'חדשות מהשטח', headerImage: '/news-header.png', cardStyle: 'article', order: 1, isVisible: true, contentType: 'newsItem' },
   { id: 'jokes', slug: 'jokes', title: 'כאן צוחקים', headerImage: '/jokes-header.png', cardStyle: 'article', order: 2, isVisible: true, contentType: 'joke' },
@@ -398,14 +423,14 @@ function mapPreviewCards(items: Record<string, unknown>[] | null): PreviewCard[]
 
 const DEFAULT_CATEGORIES: HomepageCategories = {
   flexibleHour: [
-    { title: 'כאן חושבים', href: '/#thoughts', description: 'רוצים להפעיל את הראש? כאן תמצאו חידות, חקירות ומשעשעות שיתנו לכם לחשוב ולהסיק מסקנות', image: '/thoughts-header.png' },
-    { title: 'כאן צוחקים', href: '/#jokes', description: 'כי הצחוק הוא הרפואה הטובה ביותר. לחצו כאן ותתחילו לצחוק', image: '/jokes-header.png' },
-    { title: 'כאן משחקים', href: '/#games', description: 'תלמידי שכבות ד׳-ו׳ יצרו עבורכם משחקים לימודיים אינטראקטיביים', image: '/games-header.png' },
+    { title: 'כאן חושבים', href: '/section/thoughts', description: 'רוצים להפעיל את הראש? כאן תמצאו חידות, חקירות ומשעשעות שיתנו לכם לחשוב ולהסיק מסקנות', image: '/thoughts-header.png' },
+    { title: 'כאן צוחקים', href: '/section/jokes', description: 'כי הצחוק הוא הרפואה הטובה ביותר. לחצו כאן ותתחילו לצחוק', image: '/jokes-header.png' },
+    { title: 'כאן משחקים', href: '/section/games', description: 'תלמידי שכבות ד׳-ו׳ יצרו עבורכם משחקים לימודיים אינטראקטיביים', image: '/games-header.png' },
   ],
   culture: [
-    { title: 'מה דעתי', href: '/#opinions', description: 'פינת הקורי השבועית שלנו בנושאים הרלוונטיים באמת לחיינו. חולקים את דעתנו? היגיבו והשפיעו', image: '/thoughts-header.png' },
-    { title: 'כל מה שמעניין אותו', href: '/#recommendations', description: 'מחפשים את הספר הבא? הסרט הבא? ילדי בית הספר יודעים', image: '/recommendations-header.png' },
-    { title: 'מתכונים בקטנה', href: '/#recipes', description: 'מתכונים קלים וטעימים שגם אתם יכולים להכין בבית', image: '/recipes-header.png' },
+    { title: 'מה דעתי', href: '/section/opinions', description: 'פינת הקורי השבועית שלנו בנושאים הרלוונטיים באמת לחיינו. חולקים את דעתנו? היגיבו והשפיעו', image: '/thoughts-header.png' },
+    { title: 'כל מה שמעניין אותו', href: '/section/recommendations', description: 'מחפשים את הספר הבא? הסרט הבא? ילדי בית הספר יודעים', image: '/recommendations-header.png' },
+    { title: 'מתכונים בקטנה', href: '/section/recipes', description: 'מתכונים קלים וטעימים שגם אתם יכולים להכין בבית', image: '/recipes-header.png' },
   ],
 }
 

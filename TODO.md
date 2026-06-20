@@ -11,6 +11,11 @@
 7. [X] Author name under title on all articles/pages
 8. [X] News preview: 1 image + 2 lines text + "להמשך קריאה..."
 9. [ ] Remove plain text fields from Sanity schemas — keep only rich text (Portable Text)
+10. [ ] Recipes as full pages: preview card + `/recipe/[slug]` with rich text body
+    - Add `slug` field to recipe schema
+    - Add `dietaryType` dropdown: חלבי / בשרי / פרווה
+    - Add `allergens` multi-select tags: גלוטן, אגוזים, ביצים, סויה, etc.
+    - Dietary/allergy badges on preview card and full recipe page
 
 ## Decide
 
