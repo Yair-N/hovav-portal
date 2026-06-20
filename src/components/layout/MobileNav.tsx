@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { navSections } from "@/lib/nav-sections";
+import type { NavSection } from "@/lib/nav-sections";
 
-export default function MobileNav() {
+export default function MobileNav({ navSections }: { navSections: NavSection[] }) {
   const [open, setOpen] = useState(false);
 
   return (

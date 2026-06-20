@@ -1,20 +1,23 @@
+import Image from "next/image";
 import PlaceholderImage from "@/components/PlaceholderImage";
+import type { FooterConfig } from "@/types/content";
 
-// Mirrors the footer block found at the bottom of the Home page in the
-// Canva design: a corkboard graphic, "meet the team" heading, a contact
-// link, and a social media handle.
-export default function SiteFooter() {
+export default function SiteFooter({ config }: { config: FooterConfig }) {
   return (
     <footer className="bg-hovav-footer-beige flex flex-col items-center gap-4 px-6 py-12 text-center">
-      <PlaceholderImage label="לוח שעם" className="h-32 w-48" />
-      <h2 className="text-2xl font-bold">הכירו את מערכת מחוברים</h2>
-      <a href="#" className="underline">
-        צרו אתנו קשר
+      {config.image ? (
+        <Image src={config.image} alt="" width={192} height={128} className="h-32 w-48 object-contain" />
+      ) : (
+        <PlaceholderImage label="לוח שעם" className="h-32 w-48" />
+      )}
+      <h2 className="text-2xl font-bold">{config.heading}</h2>
+      <a href={config.contactUrl} className="underline">
+        {config.contactLabel}
       </a>
       <p className="text-sm text-black/60" dir="ltr">
-        Keep up with our events on social media
+        {config.socialText}
         <br />
-        <span className="font-semibold">@reallygreatsite</span>
+        <span className="font-semibold">{config.socialHandle}</span>
       </p>
     </footer>
   );

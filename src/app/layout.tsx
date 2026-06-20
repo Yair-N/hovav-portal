@@ -4,6 +4,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import SiteHeader from "@/components/layout/SiteHeader";
 import SiteFooter from "@/components/layout/SiteFooter";
+import { getSectionConfigs, getFooterConfig } from "@/sanity/queries";
+import { buildNavSections } from "@/lib/nav-sections";
 
 const hebrewFont = Rubik({
   variable: "--font-hebrew",
@@ -30,11 +32,17 @@ export const metadata: Metadata = {
   description: "הקול של התלמידים.ות",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [sections, footerConfig] = await Promise.all([
+    getSectionConfigs(),
+    getFooterConfig(),
+  ]);
+  const navSections = buildNavSections(sections);
+
   return (
     <html
       lang="he"
@@ -42,9 +50,9 @@ export default function RootLayout({
       className={`${hebrewFont.variable} ${headingFont.variable} ${handwritingFont.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <SiteHeader />
+        <SiteHeader navSections={navSections} />
         <main className="flex-1">{children}</main>
-        <SiteFooter />
+        <SiteFooter config={footerConfig} />
       </body>
     </html>
   );

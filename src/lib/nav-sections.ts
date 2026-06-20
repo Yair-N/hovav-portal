@@ -1,9 +1,15 @@
-// Central list of the site's sections. Used to build the nav bar.
-// Each href is a hash anchor on the single scrolling homepage.
+import type { SectionConfig } from "@/types/content";
 
 export interface NavSection {
   href: string;
   title: string;
+}
+
+export function buildNavSections(sections: SectionConfig[]): NavSection[] {
+  return sections
+    .filter((s) => s.isVisible)
+    .sort((a, b) => a.order - b.order)
+    .map((s) => ({ href: `/#${s.slug}`, title: s.title }));
 }
 
 export const navSections: NavSection[] = [

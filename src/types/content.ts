@@ -5,9 +5,7 @@ export interface NewsItem {
   id: string;
   title: string;
   excerpt: string;
-  /** Path under /public, or undefined while no photo has been supplied yet. */
   image?: string;
-  /** ISO date string. */
   publishedAt?: string;
   author?: string;
 }
@@ -17,12 +15,9 @@ export interface GameItem {
   id: string;
   title: string;
   description: string;
-  /** Free-text credit, e.g. "מאת: ליה צידון". */
   author?: string;
-  /** Free-text grade/age range, e.g. "לכיתות ב-ג". */
   ageGroup?: string;
   image?: string;
-  /** External or internal link to actually play the game. */
   link?: string;
 }
 
@@ -56,9 +51,81 @@ export interface RecommendationItem {
   author?: string;
 }
 
-/** A generic text-only highlight block (e.g. the "חוב”ב על המגרש" sports spotlight). */
+/** A generic text-only highlight block with optional video. */
 export interface TextHighlight {
   id: string;
   title: string;
   body: string;
+  videoUrl?: string;
+}
+
+/** Card display style for a section. */
+export type CardStyle = "article" | "link-card" | "video";
+
+/** Section configuration — drives layout, nav, and section headers. */
+export interface SectionConfig {
+  id: string;
+  slug: string;
+  title: string;
+  description?: string;
+  headerImage?: string;
+  backgroundColor?: string;
+  cardStyle: CardStyle;
+  order: number;
+  isVisible: boolean;
+  contentType: string;
+}
+
+/** Unified item shape that all card styles can render from. */
+export interface SectionItem {
+  id: string;
+  slug?: string;
+  title: string;
+  body?: string;
+  bodyRich?: unknown[];
+  excerpt?: string;
+  excerptRich?: unknown[];
+  description?: string;
+  descriptionRich?: unknown[];
+  captionRich?: unknown[];
+  image?: string;
+  images?: string[];
+  author?: string;
+  publishedAt?: string;
+  link?: string;
+  videoUrl?: string;
+  videoFileUrl?: string;
+  ageGroup?: string;
+  caption?: string;
+  category?: string;
+}
+
+/** A preview card shown in the homepage category sections. */
+export interface PreviewCard {
+  title: string;
+  href: string;
+  description: string;
+  image?: string;
+}
+
+/** Homepage category previews from siteSettings. */
+export interface HomepageCategories {
+  flexibleHour: PreviewCard[];
+  culture: PreviewCard[];
+}
+
+/** A carousel image with caption. */
+export interface CarouselItem {
+  image: string;
+  caption?: string;
+}
+
+/** Footer configuration from Sanity. */
+export interface FooterConfig {
+  heading: string;
+  contactLabel: string;
+  contactUrl: string;
+  socialText: string;
+  socialHandle: string;
+  image?: string;
 }

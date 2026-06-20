@@ -1,46 +1,42 @@
 # TODO
 
-## Open
+## Liat
 
-1. [X] Add homepage content according to illustration /home/yair/hovav-portal/illustration.jpg
-2. [X] make headers smaller to allow more content
-3. [ ] make sure to enable description paragraph for each page - header
-4. [ ] Make footer editable via Sanity
-5. [ ] Add Sanity section config — per-section: title, description, headerImage, backgroundColor, order, isVisible
-6. [ ] Implement 3 card styles selectable per section in Sanity:
-   - **Article** — image + text paragraph
-   - **Link card** — horizontal thumbnail, title, description, external link
-   - **Video card** — embedded video (YouTube/uploaded) + optional text
-7. [ ] Add video support to behind-the-scenes (מאחורי הקלעים) cards
-8. [ ] Auto-generate nav from visible Sanity sections
-9. [ ] Card styles need unified data model — how to handle fields that only apply to some styles (e.g. `link` for link cards, `videoUrl` for video cards)?
-
-## 
-## Senity
-
-1. [ ] apply changed to senity project accordingly
-2. [ ] with senity, allow deactivating pages.
-3. [ ] page id is unique number maybe? and coralates with senity ref table so that page names/Enteries can be Edited.
+1. [X] Rich text (Portable Text) for all content fields
+2. [X] News articles: preview card with excerpt, click opens full article page
+3. [X] News/articles: multiple images and video uploads, author required
+4. [X] Video upload support in Sanity (file upload, not just URL)
+5. [X] Homepage image carousel with caption below each image
+6. [ ] "מה דעתכם?" poll widget — yes/no question from Sanity, percentages after vote, cookie prevents re-voting
+7. [X] Author name under title on all articles/pages
+8. [X] News preview: 1 image + 2 lines text + "להמשך קריאה..."
+9. [ ] Remove plain text fields from Sanity schemas — keep only rich text (Portable Text)
 
 ## Decide
 
 1. [X] Should Sanity allow creating entirely new section types, or only configure existing ones?
-2. [ ] concider allowing new pages of predefined types...
-
-## Mockup
-
-1. [X] the text scale of the preview cars is not readable
-2. [X] make hero section same as what we did in the real app
-3. [X] style whiteboard to look like a whiteboard
-4. [X] creat css for white board to meake text in handwriting font apeear as if being writen and disapear as if being erased
+2. [ ] Consider allowing new pages of predefined types
 
 ## Done
 
 - [x] Match hero sections to homepage layout
 - [x] Nav bar and scroll behavior (smooth scroll, hash anchors)
 - [x] Each section min viewport height
-- [x] Sticky nav — hides on scroll down, reappears on scroll up
+- [x] Sticky nav with 50% opacity while scrolling
 - [x] Scroll-snap to sections
-- [x] Nav hide/show on mobile with tap to reveal
 - [x] Hamburger menu collapses after selection
-- [x] Snap offset with hidden nav (non-issue — sticky reserves space)
+- [x] Data-driven sections from Sanity config with fallback defaults
+- [x] Unified SectionItem model + ArticleCard / LinkCard / VideoCard
+- [x] Auto-generated nav from section configs
+- [x] Footer driven by Sanity config with fallback
+- [x] Preview cards driven by siteSettings with fallback
+- [x] Sanity studio: sectionConfig, footerConfig, videoUrl on behindTheScenes
+- [x] All fill images have sizes prop
+- [x] Mobile: section header image below title
+- [x] Sanity deployed to hovav-portal.sanity.studio
+- [x] Rich text (Portable Text) on all content schemas
+- [x] Multiple images + video file upload on news and behind-the-scenes
+- [x] News article full page route /article/[slug]
+- [x] Author name under title in all card components
+- [x] News preview with line-clamp-2 + להמשך קריאה
+- [x] Homepage carousel from Sanity siteSettings
