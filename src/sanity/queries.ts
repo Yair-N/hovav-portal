@@ -224,16 +224,18 @@ export async function getBehindTheScenes(): Promise<TextHighlight[]> {
 }
 
 // ---------------------------------------------------------------------------
-// Single news article by slug
+// Generic item by slug (works across all content types with a slug field)
 // ---------------------------------------------------------------------------
 
-const ARTICLE_BY_SLUG_QUERY = `*[_type == "newsItem" && slug.current == $slug][0] {
-  _id, "slug": slug.current, title, bodyRich, image, images,
-  "videoFileUrl": videoFile.asset->url, publishedAt, author
+const ITEM_BY_SLUG_QUERY = `*[slug.current == $slug][0] {
+  _id, _type, "slug": slug.current, title,
+  body, bodyRich, excerpt, excerptRich, description, descriptionRich,
+  caption, captionRich, image, images, category, author, ageGroup, link,
+  publishedAt, videoUrl, "videoFileUrl": videoFile.asset->url
 }`
 
-export async function getArticleBySlug(slug: string): Promise<SectionItem | null> {
-  const item = await client.fetch(ARTICLE_BY_SLUG_QUERY, { slug })
+export async function getItemBySlug(slug: string): Promise<SectionItem | null> {
+  const item = await client.fetch(ITEM_BY_SLUG_QUERY, { slug })
   if (!item) return null
   return {
     id: item._id as string,
@@ -243,11 +245,18 @@ export async function getArticleBySlug(slug: string): Promise<SectionItem | null
     bodyRich: item.bodyRich as unknown[] | undefined,
     excerpt: item.excerpt as string | undefined,
     excerptRich: item.excerptRich as unknown[] | undefined,
+    description: item.description as string | undefined,
+    descriptionRich: item.descriptionRich as unknown[] | undefined,
+    captionRich: item.captionRich as unknown[] | undefined,
     image: resolveImage(item.image, 800),
     images: resolveImages(item.images),
     author: item.author as string | undefined,
     publishedAt: item.publishedAt as string | undefined,
+    videoUrl: item.videoUrl as string | undefined,
     videoFileUrl: item.videoFileUrl as string | undefined,
+    category: item.category as string | undefined,
+    ageGroup: item.ageGroup as string | undefined,
+    caption: item.caption as string | undefined,
   }
 }
 
@@ -268,45 +277,20 @@ const CONTENT_QUERIES: Record<string, string> = {
   behindTheScenes: `*[_type == "behindTheScenes"] | order(_createdAt desc) { _id, title, body, bodyRich, videoUrl, "videoFileUrl": videoFile.asset->url }`,
   opinion: `*[_type == "opinion"] | order(publishedAt desc) { _id, title, body, bodyRich, author, image, publishedAt }`,
   comic: `*[_type == "comic"] | order(publishedAt desc) { _id, title, image, caption, captionRich, author, publishedAt }`,
-  recommendation: `*[_type == "recommendation"] | order(_createdAt desc) { _id, title, description, descriptionRich, category, image, author }`,
+  recommendation: `*[_type == "recommendation"] | order(_createdAt desc) { _id, "slug": slug.current, title, description, descriptionRich, bodyRich, category, image, author }`,
   recipe: `*[_type == "recipe"] | order(_createdAt desc) { _id, "slug": slug.current, title, description, descriptionRich, bodyRich, category, image, author }`,
   sportsHighlight: `*[_type == "sportsHighlight"] | order(_createdAt desc) { _id, title, body, bodyRich }`,
 }
 
-// ---------------------------------------------------------------------------
-// Single recipe by slug
-// ---------------------------------------------------------------------------
+const SLUGGED_TYPES = new Set(['newsItem', 'recipe', 'recommendation'])
 
-const RECIPE_BY_SLUG_QUERY = `*[_type == "recipe" && slug.current == $slug][0] {
-  _id, "slug": slug.current, title, description, descriptionRich, bodyRich, category, image, author
-}`
 
-export async function getRecipeBySlug(slug: string): Promise<SectionItem | null> {
-  const item = await client.fetch(RECIPE_BY_SLUG_QUERY, { slug })
-  if (!item) return null
-  return {
-    id: item._id as string,
-    slug: item.slug as string,
-    title: item.title as string,
-    description: item.description as string | undefined,
-    descriptionRich: item.descriptionRich as unknown[] | undefined,
-    bodyRich: item.bodyRich as unknown[] | undefined,
-    image: resolveImage(item.image, 800),
-    author: item.author as string | undefined,
-    category: item.category as string | undefined,
-  }
-}
-
-const LINK_PREFIX: Record<string, string> = {
-  newsItem: '/article/',
-  recipe: '/recipe/',
-}
 
 export async function getSectionItems(contentType: string): Promise<SectionItem[]> {
   const query = CONTENT_QUERIES[contentType]
   if (!query) return []
   const items = await client.fetch(query)
-  const prefix = LINK_PREFIX[contentType]
+  const hasSlug = SLUGGED_TYPES.has(contentType)
   return items.map((item: Record<string, unknown>) => ({
     id: item._id as string,
     slug: item.slug as string | undefined,
@@ -328,7 +312,7 @@ export async function getSectionItems(contentType: string): Promise<SectionItem[
     ageGroup: item.ageGroup as string | undefined,
     caption: item.caption as string | undefined,
     category: item.category as string | undefined,
-    linkPrefix: prefix,
+    linkPrefix: hasSlug ? '/item/' : undefined,
   }))
 }
 
