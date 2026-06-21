@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import RichText from "@/components/RichText";
 import ImageLightbox from "@/components/ImageLightbox";
+import BackButton from "@/components/BackButton";
 import { getItemById } from "@/sanity/queries";
 import type { PortableTextBlock } from "@portabletext/types";
 
@@ -22,9 +22,8 @@ export default async function ItemPage({
 
   return (
     <article className="mx-auto max-w-3xl px-6 py-12" dir="rtl">
-      <Link href="/" className="text-sm text-black/50 hover:underline">
-        ← חזרה לעמוד הראשי
-      </Link>
+      <BackButton inline />
+      <BackButton />
 
       <h1 className="mt-6 text-3xl font-bold">{item.title}</h1>
 
