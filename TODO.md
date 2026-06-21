@@ -16,6 +16,10 @@
     - [ ] Add `allergens` multi-select tags: גלוטן, אגוזים, ביצים, סויה, etc.
     - [ ] Dietary/allergy badges on preview card and full recipe page
 
+## Open
+
+- [ ] ArticleCard needs consistent card styling (background, shadow, border-radius) to match ArticleCompactCard
+
 ## Decide
 
 1. [X] Should Sanity allow creating entirely new section types, or only configure existing ones?
