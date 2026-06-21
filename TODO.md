@@ -11,8 +11,7 @@
 7. [X] Author name under title on all articles/pages
 8. [X] News preview: 1 image + 2 lines text + "להמשך קריאה..."
 9. [X] Remove plain text fields from Sanity schemas — keep only rich text (Portable Text)
-10. [X] Recipes/recommendations as full pages with preview cards — generic `/item/[slug]` route
-    - ~~Add `slug` field to recipe schema~~ done
+10. [X] Recipes/recommendations as full pages with preview cards — generic `/item/[id]` route
     - [ ] Add `dietaryType` dropdown: חלבי / בשרי / פרווה
     - [ ] Add `allergens` multi-select tags: גלוטן, אגוזים, ביצים, סויה, etc.
     - [ ] Dietary/allergy badges on preview card and full recipe page
@@ -21,8 +20,8 @@
 
 1. [X] Should Sanity allow creating entirely new section types, or only configure existing ones?
 2. [ ] Consider allowing new pages of predefined types
-3. [ ] We need to generate slugs automatically. The field should be view only?
-4. [ ] Re-order the way content is being inserted — can I edit it myself?
+3. [X] Slugs removed — using Sanity `_id` directly, no editor effort needed
+4. [X] Field order controlled by shared functions in `_shared.ts` (e.g. `articleCompactFields()`), reorder with Alt+↑/↓
 
 ## Done
 
@@ -44,8 +43,13 @@
 - [x] News preview with line-clamp-2 + להמשך קריאה
 - [x] Homepage carousel from Sanity siteSettings
 - [x] Whiteboard messages editable from Sanity
-- [x] Generic /item/[slug] route for all content types (replaces /article/ and /recipe/)
-- [x] Recommendation schema: slug + bodyRich fields
+- [x] Generic /item/[id] route for all content types (uses Sanity _id, no slug needed)
+- [x] Recommendation schema: bodyRich fields
+- [x] Shared articleCompactFields() DNA for recipe + recommendation schemas
+- [x] Full-page behavior driven by cardStyle, not content type
+- [x] Video cards capped at max-w-2xl on desktop
+- [x] Removed all plain text fields from Sanity schemas
+- [x] Hebrew-aware slug removed — using Sanity _id for routes
 - [x] Playful game cards with pastel colors, hover effects, responsive grid
 - [x] Article-compact card style (credit-card proportions) for recipes
 - [x] Image lightbox: click to fullscreen on mobile, large view on desktop
