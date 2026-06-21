@@ -32,7 +32,7 @@ export default async function SectionPage({
   const config = await getSectionConfigBySlug(slug);
   if (!config || !config.isVisible) notFound();
 
-  const items = await getSectionItems(config.contentType);
+  const items = await getSectionItems(config.contentType, config.cardStyle);
   const Card = CARD_COMPONENT[config.cardStyle];
   const gridClass = GRID_CLASS[config.cardStyle];
 

@@ -17,7 +17,7 @@ export default async function HomePage() {
   ]);
 
   const newsConfig = sections.find((s) => s.slug === "news" && s.isVisible);
-  const newsItems = newsConfig ? await getSectionItems(newsConfig.contentType) : [];
+  const newsItems = newsConfig ? await getSectionItems(newsConfig.contentType, newsConfig.cardStyle) : [];
 
   return (
     <div>

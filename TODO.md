@@ -10,7 +10,7 @@
 6. [ ] "מה דעתכם?" poll widget — yes/no question from Sanity, percentages after vote, cookie prevents re-voting
 7. [X] Author name under title on all articles/pages
 8. [X] News preview: 1 image + 2 lines text + "להמשך קריאה..."
-9. [ ] Remove plain text fields from Sanity schemas — keep only rich text (Portable Text)
+9. [X] Remove plain text fields from Sanity schemas — keep only rich text (Portable Text)
 10. [X] Recipes/recommendations as full pages with preview cards — generic `/item/[slug]` route
     - ~~Add `slug` field to recipe schema~~ done
     - [ ] Add `dietaryType` dropdown: חלבי / בשרי / פרווה

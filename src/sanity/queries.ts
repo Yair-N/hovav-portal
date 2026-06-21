@@ -224,22 +224,22 @@ export async function getBehindTheScenes(): Promise<TextHighlight[]> {
 }
 
 // ---------------------------------------------------------------------------
-// Generic item by slug (works across all content types with a slug field)
+// Generic item by ID (works across all content types)
 // ---------------------------------------------------------------------------
 
-const ITEM_BY_SLUG_QUERY = `*[slug.current == $slug][0] {
-  _id, _type, "slug": slug.current, title,
+const ITEM_BY_ID_QUERY = `*[_id == $id][0] {
+  _id, _type, title,
   body, bodyRich, excerpt, excerptRich, description, descriptionRich,
-  caption, captionRich, image, images, category, author, ageGroup, link,
+  caption, captionRich, image, images, "category": coalesce(remarks, category), author, ageGroup, link,
   publishedAt, videoUrl, "videoFileUrl": videoFile.asset->url
 }`
 
-export async function getItemBySlug(slug: string): Promise<SectionItem | null> {
-  const item = await client.fetch(ITEM_BY_SLUG_QUERY, { slug })
+export async function getItemById(id: string): Promise<SectionItem | null> {
+  const item = await client.fetch(ITEM_BY_ID_QUERY, { id })
   if (!item) return null
   return {
     id: item._id as string,
-    slug: item.slug as string,
+    slug: item._id as string,
     title: item.title as string,
     body: item.body as string | undefined,
     bodyRich: item.bodyRich as unknown[] | undefined,
@@ -270,30 +270,28 @@ function resolveImages(imgs: unknown): string[] | undefined {
 // ---------------------------------------------------------------------------
 
 const CONTENT_QUERIES: Record<string, string> = {
-  newsItem: `*[_type == "newsItem"] | order(publishedAt desc) { _id, "slug": slug.current, title, bodyRich, image, images, "videoFileUrl": videoFile.asset->url, publishedAt, author }`,
-  joke: `*[_type == "joke"] | order(publishedAt desc) { _id, title, image, caption, captionRich, author, publishedAt }`,
-  thought: `*[_type == "thought"] | order(publishedAt desc) { _id, title, body, bodyRich, author, image, publishedAt }`,
-  game: `*[_type == "game"] | order(_createdAt desc) { _id, title, description, descriptionRich, author, ageGroup, image, link }`,
-  behindTheScenes: `*[_type == "behindTheScenes"] | order(_createdAt desc) { _id, title, body, bodyRich, videoUrl, "videoFileUrl": videoFile.asset->url }`,
-  opinion: `*[_type == "opinion"] | order(publishedAt desc) { _id, title, body, bodyRich, author, image, publishedAt }`,
-  comic: `*[_type == "comic"] | order(publishedAt desc) { _id, title, image, caption, captionRich, author, publishedAt }`,
-  recommendation: `*[_type == "recommendation"] | order(_createdAt desc) { _id, "slug": slug.current, title, description, descriptionRich, bodyRich, category, image, author }`,
-  recipe: `*[_type == "recipe"] | order(_createdAt desc) { _id, "slug": slug.current, title, description, descriptionRich, bodyRich, category, image, author }`,
-  sportsHighlight: `*[_type == "sportsHighlight"] | order(_createdAt desc) { _id, title, body, bodyRich }`,
+  newsItem: `*[_type == "newsItem"] | order(publishedAt desc) { _id, title, bodyRich, image, images, "videoFileUrl": videoFile.asset->url, publishedAt, author }`,
+  joke: `*[_type == "joke"] | order(publishedAt desc) { _id, title, image, captionRich, author, publishedAt }`,
+  thought: `*[_type == "thought"] | order(publishedAt desc) { _id, title, bodyRich, author, image, publishedAt }`,
+  game: `*[_type == "game"] | order(_createdAt desc) { _id, title, descriptionRich, author, ageGroup, image, link }`,
+  behindTheScenes: `*[_type == "behindTheScenes"] | order(_createdAt desc) { _id, title, bodyRich, videoUrl, "videoFileUrl": videoFile.asset->url }`,
+  opinion: `*[_type == "opinion"] | order(publishedAt desc) { _id, title, bodyRich, author, image, publishedAt }`,
+  comic: `*[_type == "comic"] | order(publishedAt desc) { _id, title, image, captionRich, author, publishedAt }`,
+  recommendation: `*[_type == "recommendation"] | order(_createdAt desc) { _id, title, descriptionRich, bodyRich, "category": remarks, image, author }`,
+  recipe: `*[_type == "recipe"] | order(_createdAt desc) { _id, title, descriptionRich, bodyRich, "category": remarks, image, author }`,
+  sportsHighlight: `*[_type == "sportsHighlight"] | order(_createdAt desc) { _id, title, bodyRich }`,
 }
 
-const SLUGGED_TYPES = new Set(['newsItem', 'recipe', 'recommendation'])
+const FULL_PAGE_STYLES = new Set(['article', 'article-compact'])
 
-
-
-export async function getSectionItems(contentType: string): Promise<SectionItem[]> {
+export async function getSectionItems(contentType: string, cardStyle?: string): Promise<SectionItem[]> {
   const query = CONTENT_QUERIES[contentType]
   if (!query) return []
   const items = await client.fetch(query)
-  const hasSlug = SLUGGED_TYPES.has(contentType)
+  const hasFullPage = cardStyle ? FULL_PAGE_STYLES.has(cardStyle) : false
   return items.map((item: Record<string, unknown>) => ({
     id: item._id as string,
-    slug: item.slug as string | undefined,
+    slug: item._id as string,
     title: item.title as string,
     body: item.body as string | undefined,
     bodyRich: item.bodyRich as unknown[] | undefined,
@@ -312,7 +310,7 @@ export async function getSectionItems(contentType: string): Promise<SectionItem[
     ageGroup: item.ageGroup as string | undefined,
     caption: item.caption as string | undefined,
     category: item.category as string | undefined,
-    linkPrefix: hasSlug ? '/item/' : undefined,
+    linkPrefix: hasFullPage ? '/item/' : undefined,
   }))
 }
 

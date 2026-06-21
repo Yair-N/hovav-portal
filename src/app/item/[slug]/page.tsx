@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import RichText from "@/components/RichText";
 import ImageLightbox from "@/components/ImageLightbox";
-import { getItemBySlug } from "@/sanity/queries";
+import { getItemById } from "@/sanity/queries";
 import type { PortableTextBlock } from "@portabletext/types";
 
 export const revalidate = 60;
@@ -14,7 +14,7 @@ export default async function ItemPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const item = await getItemBySlug(slug);
+  const item = await getItemById(slug);
   if (!item) notFound();
 
   const richBody = item.bodyRich || item.descriptionRich || item.excerptRich || item.captionRich;
