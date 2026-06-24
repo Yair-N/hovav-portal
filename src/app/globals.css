@@ -792,7 +792,7 @@ section.section-page {
 
 .carousel {
   position: relative;
-  max-width: 800px;
+  max-width: min(800px, 95vw);
   margin: 1.5rem auto;
   background: rgba(255, 255, 255, 0.85);
   border-radius: 1rem;
