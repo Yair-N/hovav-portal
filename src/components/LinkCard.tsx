@@ -11,7 +11,7 @@ export default function LinkCard({ item }: { item: SectionItem }) {
   const hasFullPage = !!item.slug && !!item.linkPrefix;
 
   const content = (
-    <article className="game-card">
+    <article className="game-card card-surface card-surface-interactive">
       <div className="game-card-icon">
         {item.image ? (
           <Image

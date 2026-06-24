@@ -11,7 +11,7 @@ export default function ArticleCompactCard({ item }: { item: SectionItem }) {
   const plainText = item.body || item.description || item.caption || "";
 
   const card = (
-    <article className="article-compact-card">
+    <article className="article-compact-card card-surface card-surface-interactive">
       <div className="article-compact-card-img">
         {item.image ? (
           <Image

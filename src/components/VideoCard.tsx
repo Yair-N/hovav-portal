@@ -26,7 +26,7 @@ export default function VideoCard({ item }: { item: SectionItem }) {
   const embedUrl = item.videoUrl ? getEmbedUrl(item.videoUrl) : null;
 
   return (
-    <article className="flex flex-col gap-3 max-w-2xl mx-auto">
+    <article className="card-surface flex flex-col gap-3 max-w-2xl mx-auto p-4">
       {item.videoFileUrl ? (
         <video
           src={item.videoFileUrl}

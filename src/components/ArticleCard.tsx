@@ -11,7 +11,7 @@ export default function ArticleCard({ item }: { item: SectionItem }) {
   const plainText = item.excerpt || item.body || item.description || item.caption || "";
 
   const card = (
-    <article className="flex flex-col gap-3">
+    <article className="card-surface card-surface-interactive flex h-full flex-col gap-3 p-4">
       {item.image ? (
         <Image
           src={item.image}
@@ -39,7 +39,7 @@ export default function ArticleCard({ item }: { item: SectionItem }) {
   );
 
   if (hasFullPage) {
-    return <Link href={`${item.linkPrefix}${item.slug}`}>{card}</Link>;
+    return <Link href={`${item.linkPrefix}${item.slug}`} className="block h-full text-inherit no-underline">{card}</Link>;
   }
   return card;
 }

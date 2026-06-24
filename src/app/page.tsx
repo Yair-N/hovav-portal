@@ -82,7 +82,7 @@ export default async function HomePage() {
             </p>
             <div className="preview-cards">
               {categories.flexibleHour.map((card) => (
-                <Link key={card.href} href={card.href} className="preview-card">
+                <Link key={card.href} href={card.href} className="preview-card card-surface card-surface-interactive">
                   <div className="preview-card-img">
                     {card.image && <Image src={card.image} alt="" fill sizes="(max-width: 640px) 100vw, 140px" className="object-cover" />}
                   </div>
@@ -100,7 +100,7 @@ export default async function HomePage() {
             </p>
             <div className="preview-cards">
               {categories.culture.map((card) => (
-                <Link key={card.href} href={card.href} className="preview-card">
+                <Link key={card.href} href={card.href} className="preview-card card-surface card-surface-interactive">
                   <div className="preview-card-img">
                     {card.image && <Image src={card.image} alt="" fill sizes="(max-width: 640px) 100vw, 140px" className="object-cover" />}
                   </div>

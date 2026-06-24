@@ -21,7 +21,7 @@ export default function Whiteboard({ messages }: { messages: string[] }) {
 
       const restart = (el: HTMLElement, cls: string) => {
         el.classList.remove(cls);
-        el.offsetHeight;
+        void el.offsetHeight;
         el.classList.add(cls);
       };
 
